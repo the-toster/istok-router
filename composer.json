@@ -1,0 +1,27 @@
+{
+  "name": "istok/router",
+  "description": "Basic routing component",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Istok\\Router\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Test\\": "tests/"
+    }
+  },
+  "authors": [
+    {
+      "name": "programmer",
+      "email": "internetov.ru@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^8.1",
+    "phpunit/phpunit": "^9.5",
+    "vimeo/psalm": "^4.22"
+  }
+}
