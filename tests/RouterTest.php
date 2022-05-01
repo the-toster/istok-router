@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Istok\Router\Match\Template;
+use Istok\Router\Http\HttpRequest;
+use Istok\Router\Http\HttpTemplate;
 use Istok\Router\Result;
 use Istok\Router\Route;
 use Istok\Router\Router;
@@ -16,10 +17,10 @@ final class RouterTest extends TestCase
     public function it_can_route_with_wildcard(): void
     {
         $router = new Router();
-        $route = new Route(new Template('Post /test/{id}/new/{url*}'), 'marker');
+        $route = new Route(new HttpTemplate('/test/{id}/new/{url*}'), 'marker');
         $router->add($route);
 
-        $result = $router->find('Post /test/abc/new/http://url.com');
+        $result = $router->find(new HttpRequest('/test/abc/new/http://url.com', 'post', 'example.com'));
         $this->assertEquals(new Result($route, ['id' => 'abc', 'url' => 'http://url.com']), $result);
     }
 
@@ -27,10 +28,10 @@ final class RouterTest extends TestCase
     public function it_can_route_simple(): void
     {
         $router = new Router();
-        $route = new Route(new Template('Post /test/abc'), 'marker');
+        $route = new Route(new HttpTemplate('/test/abc'), 'marker');
         $router->add($route);
 
-        $result = $router->find('Post /test/abc');
+        $result = $router->find(new HttpRequest('/test/abc', 'post', 'example.com'));
         $this->assertEquals(new Result($route, []), $result);
     }
 }
