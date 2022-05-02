@@ -23,7 +23,7 @@ use Istok\Router\Http\HttpRequest;
 // define single router entry
 $route = new Route(
     // provide template interface
-    new HttpTemplate('/post/{id}', 'GET', '{user}.example.com'),
+    new HttpTemplate('/post/{id}/show', 'GET', '{user}.example.com'),
     // provide handler
     fn($id, $user) => print "User: $user, id: $id"
 );
@@ -33,7 +33,7 @@ $router = new Router();
 $router->add($route);
 
 // special http-oriented implementation of Request interface
-$request = new HttpRequest('/post/abc', 'GET', 'user1.example.com');
+$request = new HttpRequest('/post/abc/show', 'GET', 'user1.example.com');
 
 // match route to request
 $result = $router->find($request);
@@ -43,3 +43,18 @@ $result = $router->find($request);
 ($result->route->handler)(...$result->arguments); // User: user1, id: abc 
 
 ```
+
+
+## How to capture rest part of template
+Last one in `path`
+```php
+$template =  new HttpTemplate('/post/{url*}'),
+```
+will match `/post/abc/def`, with arguments `['url' => 'abc/def']`
+
+Similar in host
+```php
+$template =  new HttpTemplate('/', host: '{subdomain*}.example.com'),
+
+```
+will match `abc.def.example.com`, with arguments ['subdomain' => 'abc.def']
