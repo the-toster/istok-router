@@ -52,9 +52,9 @@ $template =  new HttpTemplate('/post/{url*}'),
 ```
 will match `/post/abc/def`, with arguments `['url' => 'abc/def']`
 
-Similar in host
+Similar in `host`
 ```php
 $template =  new HttpTemplate('/', host: '{subdomain*}.example.com'),
 
 ```
-will match `abc.def.example.com`, with arguments ['subdomain' => 'abc.def']
+will match `abc.def.example.com`, with arguments `['subdomain' => 'abc.def']`
