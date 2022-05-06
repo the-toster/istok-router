@@ -29,8 +29,7 @@ $route = new Route(
 );
 
 // setup router, add our single route
-$router = new Router();
-$router->add($route);
+$router = new Router($route);
 
 // special http-oriented implementation of Request interface
 $request = new HttpRequest('/post/abc/show', 'GET', 'user1.example.com');

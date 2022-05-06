@@ -14,8 +14,7 @@ $route = new Route(
     fn($id, $user) => print "User: $user, id: $id"
 );
 
-$router = new Router();
-$router->add($route);
+$router = new Router($route);
 
 $request = new HttpRequest('/post/abc/show', 'GET', 'user1.example.com');
 

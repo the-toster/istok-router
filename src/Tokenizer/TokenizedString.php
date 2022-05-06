@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Istok\Router\Tokenizer;
 
-/** @property-read Token[] $tokens */
+/** @property-read array<int,Token> $tokens */
 final class TokenizedString
 {
     public readonly int $size;
@@ -23,6 +23,11 @@ final class TokenizedString
         $this->lastToken = $this->tokens[$this->size - 1];
     }
 
+    public function getContent(int $place): string
+    {
+        return $this->tokens[$place]->content;
+    }
+
     public function match(TokenizedString $input): bool
     {
         if ($input->size < $this->size) {
@@ -30,7 +35,7 @@ final class TokenizedString
         }
 
         foreach ($this->tokens as $place => $token) {
-            if (!$token->match($input->tokens[$place]->content)) {
+            if (!$token->match($input->getContent($place))) {
                 return false;
             }
         }
@@ -47,11 +52,12 @@ final class TokenizedString
         $r = [];
         foreach ($this->tokens as $place => $token) {
             if ($token->variable) {
-                $r[$token->variable] = $input->tokens[$place]->content;
+                $r[$token->variable] = $input->getContent($place);
             }
         }
 
         if ($input->size > $this->size) {
+            /** @psalm-suppress PossiblyNullArrayOffset */
             $r[$this->lastToken->variable] = $input->restoreFrom($this->size);
         }
 

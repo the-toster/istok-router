@@ -7,11 +7,16 @@ namespace Istok\Router;
 final class Router
 {
     /** @var Route[] */
-    private array $routes = [];
+    private readonly array $routes;
 
-    public function add(Route $route): void
+    public function __construct(Route ...$routes)
     {
-        $this->routes[] = $route;
+        $this->routes = $routes;
+    }
+
+    public function withRoute(Route $route): self
+    {
+        return new self($route, ...$this->routes);
     }
 
     public function find(Request $request): ?Result

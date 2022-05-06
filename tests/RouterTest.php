@@ -16,9 +16,8 @@ final class RouterTest extends TestCase
     /** @test */
     public function it_can_route_with_wildcard(): void
     {
-        $router = new Router();
         $route = new Route(new HttpTemplate('/test/{id}/new/{url*}'), 'marker');
-        $router->add($route);
+        $router = new Router($route);
 
         $result = $router->find(new HttpRequest('/test/abc/new/http://url.com', 'post', 'example.com'));
         $this->assertEquals(new Result($route, ['id' => 'abc', 'url' => 'http://url.com']), $result);
@@ -27,9 +26,20 @@ final class RouterTest extends TestCase
     /** @test */
     public function it_can_route_simple(): void
     {
-        $router = new Router();
         $route = new Route(new HttpTemplate('/test/abc'), 'marker');
-        $router->add($route);
+        $router = new Router($route);
+
+        $result = $router->find(new HttpRequest('/test/abc', 'post', 'example.com'));
+        $this->assertEquals(new Result($route, []), $result);
+    }
+
+    /** @test */
+    public function it_can_add_route(): void
+    {
+        $router = new Router(new Route(new HttpTemplate('/test/other'), 'other'));
+        $route = new Route(new HttpTemplate('/test/abc'), 'marker');
+
+        $router = $router->withRoute($route);
 
         $result = $router->find(new HttpRequest('/test/abc', 'post', 'example.com'));
         $this->assertEquals(new Result($route, []), $result);
